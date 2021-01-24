@@ -661,9 +661,11 @@ class _BetterPlayerMaterialControlsState
           _controller,
           _betterPlayerController,
           onDragStart: () {
+            _betterPlayerController.dragStart();
             _hideTimer?.cancel();
           },
           onDragEnd: () {
+            _betterPlayerController.dragStop();
             _startHideTimer();
           },
           colors: BetterPlayerProgressColors(

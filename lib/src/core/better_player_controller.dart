@@ -23,6 +23,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:path_provider/path_provider.dart';
 
+import '../../better_player.dart';
+
 class BetterPlayerController extends ChangeNotifier {
   static const _durationParameter = "duration";
   static const _progressParameter = "progress";
@@ -141,7 +143,13 @@ class BetterPlayerController extends ChangeNotifier {
   ///Are controls always visible
   bool _controlsAlwaysVisible = false;
 
+  //? Custom variable to alter settings such as drag and forward on on chapter
+  bool _isCurrentChapterCompleted;
+
   bool get controlsAlwaysVisible => _controlsAlwaysVisible;
+  bool get isCurrentChapterCompleted => _isCurrentChapterCompleted;
+
+  Duration maxWatchTime;
 
   BetterPlayerController(
     this.betterPlayerConfiguration, {
@@ -162,6 +170,9 @@ class BetterPlayerController extends ChangeNotifier {
     return betterPLayerControllerProvider.controller;
   }
 
+  void setCurrentChapterStatus(bool status) =>
+      _isCurrentChapterCompleted = status;
+
   Future setupDataSource(BetterPlayerDataSource betterPlayerDataSource) async {
     assert(
         betterPlayerDataSource != null, "BetterPlayerDataSource can't be null");
@@ -177,6 +188,9 @@ class BetterPlayerController extends ChangeNotifier {
 
     ///Clear hls tracks
     betterPlayerTracks.clear();
+
+    //? Reset maxWatchTime on change;
+    maxWatchTime = Duration();
 
     ///Setup subtitles
     final List<BetterPlayerSubtitlesSource> betterPlayerSubtitlesSourceList =
@@ -342,6 +356,14 @@ class BetterPlayerController extends ChangeNotifier {
     }
   }
 
+  //? DRAG START/END CODE
+
+  void dragStart() =>
+      _postEvent(BetterPlayerEvent(BetterPlayerEventType.dragStart));
+
+  void dragStop() =>
+      _postEvent(BetterPlayerEvent(BetterPlayerEventType.dragStop));
+
   Future<void> _fullScreenListener() async {
     if (videoPlayerController.value.isPlaying && !_isFullScreen) {
       enterFullScreen();
@@ -495,6 +517,7 @@ class BetterPlayerController extends ChangeNotifier {
       }
 
       if (currentPositionShifted > currentVideoPlayerValue.duration) {
+        maxWatchTime = currentVideoPlayerValue.duration;
         _postEvent(
           BetterPlayerEvent(
             BetterPlayerEventType.finished,
@@ -505,6 +528,8 @@ class BetterPlayerController extends ChangeNotifier {
           ),
         );
       } else {
+        if (maxWatchTime < currentVideoPlayerValue.position)
+          maxWatchTime = currentVideoPlayerValue.position;
         _postEvent(
           BetterPlayerEvent(
             BetterPlayerEventType.progress,

@@ -48,6 +48,8 @@ class _VideoProgressBarState
   BetterPlayerController get betterPlayerController =>
       widget.betterPlayerController;
 
+  DragUpdateDetails lastDragEvent;
+
   @override
   void initState() {
     super.initState();
@@ -68,7 +70,15 @@ class _VideoProgressBarState
       final double relative = tapPos.dx / box.size.width;
       if (relative > 0) {
         final Duration position = controller.value.duration * relative;
-        betterPlayerController.seekTo(position);
+        //? Modifying seek position to only move backwards if the chapter is not completed
+        if (betterPlayerController.isCurrentChapterCompleted)
+          betterPlayerController.seekTo(position);
+        else {
+          if (position < controller.value.position ||
+              position < betterPlayerController.maxWatchTime) {
+            betterPlayerController.seekTo(position);
+          }
+        }
       }
     }
 
@@ -92,6 +102,8 @@ class _VideoProgressBarState
           return;
         }
 
+        lastDragEvent = details;
+        // if (betterPlayerController.isCurrentChapterCompleted ?? false)
         seekToRelativePosition(details.globalPosition);
 
         if (widget.onDragUpdate != null) {
@@ -102,7 +114,6 @@ class _VideoProgressBarState
         if (_controllerWasPlaying) {
           controller.play();
         }
-
         if (widget.onDragEnd != null) {
           widget.onDragEnd();
         }

@@ -18,7 +18,8 @@ class _HlsTracksPageState extends State<HlsTracksPage> {
       fit: BoxFit.contain,
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.network, Constants.hlsTestStreamUrl,
+        BetterPlayerDataSourceType.network,
+        "https://cdn.jwplayer.com/manifests/bYg50voQ.m3u8",
         useHlsSubtitles: true);
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
     _betterPlayerController.setupDataSource(dataSource);
