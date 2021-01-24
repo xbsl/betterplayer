@@ -149,6 +149,15 @@ class BetterPlayerController extends ChangeNotifier {
   bool get controlsAlwaysVisible => _controlsAlwaysVisible;
   bool get isCurrentChapterCompleted => _isCurrentChapterCompleted;
 
+  bool get withinLimits => videoPlayerController.value == null
+      ? false
+      : videoPlayerController.value.position < maxWatchTime;
+
+  bool get showForwadSkip => videoPlayerController.value == null
+      ? false
+      : videoPlayerController.value.position.inSeconds + 10 <
+          maxWatchTime.inSeconds;
+
   Duration maxWatchTime;
 
   BetterPlayerController(

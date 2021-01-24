@@ -239,7 +239,7 @@ class _BetterPlayerMaterialControlsState
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Icon(
-          _controlsConfiguration.overflowMenuIcon,
+          Icons.settings,
           color: _controlsConfiguration.iconsColor,
         ),
       ),
@@ -279,6 +279,7 @@ class _BetterPlayerMaterialControlsState
               _buildMuteButton(_controller)
             else
               const SizedBox(),
+            _buildMoreButton(),
             if (_controlsConfiguration.enableFullscreen)
               _buildExpandButton()
             else
@@ -357,7 +358,9 @@ class _BetterPlayerMaterialControlsState
           else
             const SizedBox(),
           _buildReplayButton(),
-          if (_controlsConfiguration.enableSkips)
+          if (_controlsConfiguration.enableSkips &&
+              (betterPlayerController.isCurrentChapterCompleted ||
+                  betterPlayerController.showForwadSkip))
             _buildForwardButton()
           else
             const SizedBox(),
