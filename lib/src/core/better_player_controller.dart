@@ -25,6 +25,8 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../better_player.dart';
 
+enum PlayerLanguage { en, hi }
+
 class BetterPlayerController extends ChangeNotifier {
   static const _durationParameter = "duration";
   static const _progressParameter = "progress";
@@ -144,10 +146,12 @@ class BetterPlayerController extends ChangeNotifier {
   bool _controlsAlwaysVisible = false;
 
   //? Custom variable to alter settings such as drag and forward on on chapter
-  bool _isCurrentChapterCompleted;
+  // bool _isCurrentChapterCompleted;
+
+  StreamController<bool> chapterCompletedController =
+      StreamController.broadcast();
 
   bool get controlsAlwaysVisible => _controlsAlwaysVisible;
-  bool get isCurrentChapterCompleted => _isCurrentChapterCompleted;
 
   bool get withinLimits => videoPlayerController.value == null
       ? false
@@ -158,7 +162,13 @@ class BetterPlayerController extends ChangeNotifier {
       : videoPlayerController.value.position.inSeconds + 10 <
           maxWatchTime.inSeconds;
 
+  bool stopSendingEvents = false;
+
+  Map<BetterPlayerDataSource, bool> completedSources = {};
+
   Duration maxWatchTime;
+
+  PlayerLanguage playerLanguage = PlayerLanguage.en;
 
   BetterPlayerController(
     this.betterPlayerConfiguration, {
@@ -179,8 +189,11 @@ class BetterPlayerController extends ChangeNotifier {
     return betterPLayerControllerProvider.controller;
   }
 
-  void setCurrentChapterStatus(bool status) =>
-      _isCurrentChapterCompleted = status;
+  void setPlayerLanguage(PlayerLanguage language) => playerLanguage = language;
+
+  void setCurrentChapterStatus(bool status) {
+    chapterCompletedController.add(status);
+  }
 
   Future setupDataSource(BetterPlayerDataSource betterPlayerDataSource) async {
     assert(
@@ -452,6 +465,10 @@ class BetterPlayerController extends ChangeNotifier {
     return videoPlayerController.value.isBuffering;
   }
 
+  void stopEvents() => stopSendingEvents = false;
+
+  void startEvents() => stopSendingEvents = true;
+
   ///Show or hide controls manually
   void setControlsVisibility(bool isVisible) {
     assert(isVisible != null, "IsVisible can't be null");
@@ -477,11 +494,12 @@ class BetterPlayerController extends ChangeNotifier {
   }
 
   void _postEvent(BetterPlayerEvent betterPlayerEvent) {
-    for (final Function eventListener in _eventListeners) {
-      if (eventListener != null) {
-        eventListener(betterPlayerEvent);
+    if (!stopSendingEvents)
+      for (final Function eventListener in _eventListeners) {
+        if (eventListener != null) {
+          eventListener(betterPlayerEvent);
+        }
       }
-    }
   }
 
   void _onVideoPlayerChanged() async {
@@ -499,6 +517,7 @@ class BetterPlayerController extends ChangeNotifier {
     if (currentVideoPlayerValue.initialized &&
         !_hasCurrentDataSourceInitialized) {
       _hasCurrentDataSourceInitialized = true;
+
       _postEvent(BetterPlayerEvent(BetterPlayerEventType.initialized));
     }
     if (currentVideoPlayerValue.isPip) {
@@ -653,17 +672,28 @@ class BetterPlayerController extends ChangeNotifier {
 
   ///Setup translations for given locale. In normal use cases it shouldn't be
   ///called manually.
-  void setupTranslations(Locale locale) {
-    if (locale != null) {
-      final String languageCode = locale.languageCode;
-      translations = betterPlayerConfiguration.translations?.firstWhere(
-              (translations) => translations.languageCode == languageCode,
-              orElse: () => null) ??
-          _getDefaultTranslations(locale);
-    } else {
-      BetterPlayerUtils.log("Locale is null. Couldn't setup translations.");
-    }
+  ///
+
+  void setLocaleEN() => translations = BetterPlayerTranslations();
+
+  void setLocaleHI() => translations = BetterPlayerTranslations.hindi();
+
+  void setupTranslations(PlayerLanguage language) {
+    if (language == PlayerLanguage.en) setLocaleEN();
+    if (language == PlayerLanguage.hi) setLocaleHI();
   }
+
+  // void setupTranslations(Locale locale) {
+  //   if (locale != null) {
+  //     final String languageCode = locale.languageCode;
+  //     translations = betterPlayerConfiguration.translations?.firstWhere(
+  //             (translations) => translations.languageCode == languageCode,
+  //             orElse: () => null) ??
+  //         _getDefaultTranslations(locale);
+  //   } else {
+  //     BetterPlayerUtils.log("Locale is null. Couldn't setup translations.");
+  //   }
+  // }
 
   ///Setup default translations for selected user locale. These translations
   ///are pre-build in.
@@ -812,6 +842,7 @@ class BetterPlayerController extends ChangeNotifier {
       return;
     }
     if (!_disposed) {
+      chapterCompletedController.close();
       _eventListeners.clear();
       videoPlayerController?.removeListener(_fullScreenListener);
       videoPlayerController?.removeListener(_onVideoPlayerChanged);

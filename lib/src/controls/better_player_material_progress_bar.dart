@@ -64,14 +64,16 @@ class _VideoProgressBarState
 
   @override
   Widget build(BuildContext context) {
-    void seekToRelativePosition(Offset globalPosition) {
+    void seekToRelativePosition(Offset globalPosition) async {
       final box = context.findRenderObject() as RenderBox;
       final Offset tapPos = box.globalToLocal(globalPosition);
       final double relative = tapPos.dx / box.size.width;
       if (relative > 0) {
         final Duration position = controller.value.duration * relative;
         //? Modifying seek position to only move backwards if the chapter is not completed
-        if (betterPlayerController.isCurrentChapterCompleted)
+        final isCurrentChapterCompleted =
+            await betterPlayerController.chapterCompletedController.stream.last;
+        if (isCurrentChapterCompleted)
           betterPlayerController.seekTo(position);
         else {
           if (position < controller.value.position ||

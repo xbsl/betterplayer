@@ -358,12 +358,17 @@ class _BetterPlayerMaterialControlsState
           else
             const SizedBox(),
           _buildReplayButton(),
-          if (_controlsConfiguration.enableSkips &&
-              (betterPlayerController.isCurrentChapterCompleted ||
-                  betterPlayerController.showForwadSkip))
-            _buildForwardButton()
-          else
-            const SizedBox(),
+          StreamBuilder<bool>(
+            initialData: false,
+            stream: betterPlayerController.chapterCompletedController.stream,
+            builder: (context, snap) {
+              if (_controlsConfiguration.enableSkips &&
+                  (snap.data || betterPlayerController.showForwadSkip))
+                return _buildForwardButton();
+              else
+                return const SizedBox();
+            },
+          ),
         ],
       ),
     );

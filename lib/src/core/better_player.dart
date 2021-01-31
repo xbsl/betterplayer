@@ -21,7 +21,10 @@ typedef BetterPlayerRoutePageBuilder = Widget Function(
     BetterPlayerControllerProvider controllerProvider);
 
 class BetterPlayer extends StatefulWidget {
-  const BetterPlayer({Key key, @required this.controller})
+  const BetterPlayer(
+      {Key key,
+      @required this.controller,
+      @required this.playerLanguage = PlayerLanguage.en})
       : assert(
             controller != null, 'You must provide a better player controller'),
         super(key: key);
@@ -50,8 +53,9 @@ class BetterPlayer extends StatefulWidget {
         ),
       );
 
+  ///*variables
   final BetterPlayerController controller;
-
+  final PlayerLanguage playerLanguage;
   @override
   BetterPlayerState createState() {
     return BetterPlayerState();
@@ -83,7 +87,7 @@ class BetterPlayerState extends State<BetterPlayer>
         locale = contextLocale;
       }
     }
-    widget.controller.setupTranslations(locale);
+    widget.controller.setupTranslations(widget.playerLanguage);
   }
 
   @override
