@@ -22,10 +22,12 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../better_player.dart';
 
 enum PlayerLanguage { en, hi }
+enum ChapterStatus { complete, incompleted }
 
 class BetterPlayerController extends ChangeNotifier {
   static const _durationParameter = "duration";
@@ -148,8 +150,10 @@ class BetterPlayerController extends ChangeNotifier {
   //? Custom variable to alter settings such as drag and forward on on chapter
   // bool _isCurrentChapterCompleted;
 
-  StreamController<bool> chapterCompletedController =
-      StreamController.broadcast();
+  BehaviorSubject<ChapterStatus> chapterCompletedController =
+      BehaviorSubject<ChapterStatus>.seeded(null);
+
+  Stream get chapterCompleted => chapterCompletedController.stream;
 
   bool get controlsAlwaysVisible => _controlsAlwaysVisible;
 
@@ -192,7 +196,8 @@ class BetterPlayerController extends ChangeNotifier {
   void setPlayerLanguage(PlayerLanguage language) => playerLanguage = language;
 
   void setCurrentChapterStatus(bool status) {
-    chapterCompletedController.add(status);
+    chapterCompletedController
+        .add(status ? ChapterStatus.complete : ChapterStatus.incompleted);
   }
 
   Future setupDataSource(BetterPlayerDataSource betterPlayerDataSource) async {

@@ -72,8 +72,8 @@ class _VideoProgressBarState
         final Duration position = controller.value.duration * relative;
         //? Modifying seek position to only move backwards if the chapter is not completed
         final isCurrentChapterCompleted =
-            await betterPlayerController.chapterCompletedController.stream.last;
-        if (isCurrentChapterCompleted)
+            betterPlayerController.chapterCompletedController.value;
+        if (isCurrentChapterCompleted == ChapterStatus.complete)
           betterPlayerController.seekTo(position);
         else {
           if (position < controller.value.position ||
