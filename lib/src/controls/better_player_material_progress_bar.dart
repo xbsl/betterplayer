@@ -50,10 +50,18 @@ class _VideoProgressBarState
 
   DragUpdateDetails lastDragEvent;
 
+  Duration limit;
+
+  ChapterStatus isCurrentChapterCompleted;
+
   @override
   void initState() {
     super.initState();
     controller.addListener(listener);
+    limit = betterPlayerController.maxWatchTime;
+
+    isCurrentChapterCompleted =
+        betterPlayerController.chapterCompletedController.value;
   }
 
   @override
@@ -71,13 +79,11 @@ class _VideoProgressBarState
       if (relative > 0) {
         final Duration position = controller.value.duration * relative;
         //? Modifying seek position to only move backwards if the chapter is not completed
-        final isCurrentChapterCompleted =
-            betterPlayerController.chapterCompletedController.value;
+
         if (isCurrentChapterCompleted == ChapterStatus.complete)
           betterPlayerController.seekTo(position);
         else {
-          if (position < controller.value.position ||
-              position < betterPlayerController.maxWatchTime) {
+          if (position < limit) {
             betterPlayerController.seekTo(position);
           }
         }
@@ -89,6 +95,14 @@ class _VideoProgressBarState
         if (!controller.value.initialized) {
           return;
         }
+        // if (isCurrentChapterCompleted == ChapterStatus.complete) {
+          final pos = controller.value.position;
+          if (pos > betterPlayerController.maxWatchTime) {
+            limit = pos;
+          } else {
+            limit = betterPlayerController.maxWatchTime;
+          }
+        // }
 
         _controllerWasPlaying = controller.value.isPlaying;
         if (_controllerWasPlaying) {
@@ -105,8 +119,9 @@ class _VideoProgressBarState
         }
 
         lastDragEvent = details;
-        // if (betterPlayerController.isCurrentChapterCompleted ?? false)
-        seekToRelativePosition(details.globalPosition);
+        ///If chapter is completed no problem drag event is update
+        // if (isCurrentChapterCompleted == ChapterStatus.complete)
+          seekToRelativePosition(details.globalPosition);
 
         if (widget.onDragUpdate != null) {
           widget.onDragUpdate();
