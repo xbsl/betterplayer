@@ -174,6 +174,10 @@ class BetterPlayerController extends ChangeNotifier {
 
   PlayerLanguage playerLanguage = PlayerLanguage.en;
 
+  bool _handleLifecycle;
+
+  bool get handleLifecycle => _handleLifecycle;
+
   BetterPlayerController(
     this.betterPlayerConfiguration, {
     this.betterPlayerPlaylistConfiguration,
@@ -192,6 +196,9 @@ class BetterPlayerController extends ChangeNotifier {
 
     return betterPLayerControllerProvider.controller;
   }
+
+  void enableLifecycleEvents() => _handleLifecycle = true;
+  void disableLifecycleEvents() => _handleLifecycle = false;
 
   void setPlayerLanguage(PlayerLanguage language) => playerLanguage = language;
 
@@ -643,7 +650,7 @@ class BetterPlayerController extends ChangeNotifier {
     _postEvent(
         BetterPlayerEvent(BetterPlayerEventType.changedPlayerVisibility));
 
-    if (betterPlayerConfiguration.handleLifecycle) {
+    if (handleLifecycle) {
       if (betterPlayerConfiguration.playerVisibilityChangedBehavior != null) {
         betterPlayerConfiguration
             .playerVisibilityChangedBehavior(visibilityFraction);
@@ -722,7 +729,7 @@ class BetterPlayerController extends ChangeNotifier {
   bool get hasCurrentDataSourceStarted => _hasCurrentDataSourceStarted;
 
   void setAppLifecycleState(AppLifecycleState appLifecycleState) {
-    if (betterPlayerConfiguration.handleLifecycle) {
+    if (handleLifecycle) {
       _appLifecycleState = appLifecycleState;
       if (appLifecycleState == AppLifecycleState.resumed) {
         if (_wasPlayingBeforePause) {

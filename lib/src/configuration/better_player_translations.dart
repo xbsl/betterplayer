@@ -52,7 +52,7 @@ class BetterPlayerTranslations {
   factory BetterPlayerTranslations.hindi() => BetterPlayerTranslations(
         languageCode: "hi",
         generalDefaultError: "वीडियो नहीं चलाया जा सकता",
-        generalNone: "कोई नहीं",
+        generalNone: "कुछ नहीं",
         generalDefault: "चूक",
         playlistLoadingNextVideo: "अगला वीडियो लोड हो रहा है",
         controlsLive: "लाइव",

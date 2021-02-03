@@ -98,7 +98,6 @@ class BetterPlayerConfiguration {
 
   ///Defines flag which enables/disables lifecycle handling (pause on app closed,
   ///play on app resumed). Default value is true.
-  final bool handleLifecycle;
 
   ///Defines flag which enabled/disabled auto dispose on BetterPlayer dispose.
   ///Default value is true.
@@ -137,7 +136,6 @@ class BetterPlayerConfiguration {
     this.playerVisibilityChangedBehavior,
     this.translations,
     this.autoDetectFullscreenDeviceOrientation = false,
-    this.handleLifecycle = true,
     this.autoDispose = true,
   });
 
