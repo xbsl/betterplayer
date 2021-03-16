@@ -556,7 +556,7 @@ class BetterPlayerController extends ChangeNotifier {
         return;
       }
 
-      if (currentPositionShifted > currentVideoPlayerValue.duration) {
+      if (currentPositionShifted >= currentVideoPlayerValue.duration) {
         maxWatchTime = currentVideoPlayerValue.duration;
         _postEvent(
           BetterPlayerEvent(

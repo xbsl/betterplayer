@@ -103,7 +103,10 @@ class BetterPlayerConfiguration {
   ///Default value is true.
   final bool autoDispose;
 
+  final Widget Function() overlayWidget;
+
   const BetterPlayerConfiguration({
+    this.overlayWidget,
     this.aspectRatio,
     this.autoPlay = false,
     this.startAt,
