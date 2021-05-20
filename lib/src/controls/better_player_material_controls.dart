@@ -259,10 +259,11 @@ class _BetterPlayerMaterialControlsState
         color: _controlsConfiguration.controlBarColor,
         child: Row(
           children: [
-            if (_controlsConfiguration.enablePlayPause)
-              _buildPlayPause(_controller)
-            else
-              const SizedBox(),
+            // if (_controlsConfiguration.enablePlayPause)
+            //   _buildPlayPause(_controller)
+            // else
+            //   const SizedBox(),
+            const SizedBox(width: 10),
             if (_betterPlayerController.isLiveStream())
               _buildLiveWidget()
             else
@@ -339,6 +340,22 @@ class _BetterPlayerMaterialControlsState
               children: [
                 _buildMiddleRow(),
                 _buildNextVideoWidget(),
+                Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: _buildHitAreaClickableButton(
+                        icon: Icon(
+                          _controller.value.isPlaying
+                              ? _controlsConfiguration.pauseIcon
+                              : _controlsConfiguration.playIcon,
+                          color: _controlsConfiguration.iconsColor,
+                          size: 32,
+                        ),
+                        onClicked: _onPlayPause,
+                      ),
+                    )),
               ],
             ),
           ),
@@ -365,7 +382,7 @@ class _BetterPlayerMaterialControlsState
               if (snap.data == ChapterStatus.complete)
                 return _buildForwardButton();
               else
-                return const SizedBox();
+                return const SizedBox(width: 32, height: 32);
             },
           ),
         ],
