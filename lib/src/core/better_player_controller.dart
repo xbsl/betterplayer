@@ -178,6 +178,8 @@ class BetterPlayerController extends ChangeNotifier {
 
   bool get handleLifecycle => _handleLifecycle;
 
+  Function get onPlayerClose => betterPlayerConfiguration.onPlayerClose;
+
   BetterPlayerController(
     this.betterPlayerConfiguration, {
     this.betterPlayerPlaylistConfiguration,

@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:io';
 
 // Project imports:
 import 'package:better_player/src/configuration/better_player_controls_configuration.dart';
@@ -182,7 +183,24 @@ class _BetterPlayerMaterialControlsState
           ),
         )
       else
-        const SizedBox()
+        const SizedBox(),
+      if (Platform.isIOS)
+        AnimatedOpacity(
+          opacity: _hideStuff ? 0.0 : 1.0,
+          duration: _controlsConfiguration.controlsHideTime,
+          onEnd: _onPlayerHide,
+          child: Container(
+            height: _controlsConfiguration.controlBarHeight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                _buildCloseButton(),
+              ],
+            ),
+          ),
+        )
+      else
+        const SizedBox(),
     ]);
   }
 
@@ -240,6 +258,21 @@ class _BetterPlayerMaterialControlsState
         padding: const EdgeInsets.all(8),
         child: Icon(
           Icons.settings,
+          color: _controlsConfiguration.iconsColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCloseButton() {
+    return BetterPlayerMaterialClickableWidget(
+      onTap: () {
+        betterPlayerController?.onPlayerClose?.call();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          Icons.close,
           color: _controlsConfiguration.iconsColor,
         ),
       ),

@@ -105,7 +105,10 @@ class BetterPlayerConfiguration {
 
   final Widget Function() overlayWidget;
 
+  final Function() onPlayerClose;
+
   const BetterPlayerConfiguration({
+    this.onPlayerClose,
     this.overlayWidget,
     this.aspectRatio,
     this.autoPlay = false,
