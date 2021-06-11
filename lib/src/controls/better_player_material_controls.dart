@@ -313,7 +313,10 @@ class _BetterPlayerMaterialControlsState
               _buildMuteButton(_controller)
             else
               const SizedBox(),
-            _buildMoreButton(),
+            if (_controlsConfiguration.enableSettings)
+              _buildMoreButton()
+            else
+              const SizedBox(),
             if (_controlsConfiguration.enableFullscreen)
               _buildExpandButton()
             else

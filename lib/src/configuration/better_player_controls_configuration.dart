@@ -144,7 +144,13 @@ class BetterPlayerControlsConfiguration {
   ///Widget which can be used instead of default progress
   final Widget loadingWidget;
 
+  final bool enableSettings;
+
+  final List<double> supportedPlaybackSpeed;
+
   const BetterPlayerControlsConfiguration({
+    this.supportedPlaybackSpeed = const [],
+    this.enableSettings = true,
     this.controlBarColor = Colors.black87,
     this.textColor = Colors.white,
     this.iconsColor = Colors.white,
