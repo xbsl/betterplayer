@@ -16,7 +16,7 @@ class _OverriddenDurationPageState extends State<OverriddenDurationPage> {
         BetterPlayerConfiguration(
       aspectRatio: 16 / 9,
       fit: BoxFit.contain,
-      handleLifecycle: true,
+      // handleLifecycle: true,
     );
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
     _setupDataSource();
