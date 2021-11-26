@@ -64,7 +64,8 @@ class _VideoProgressBarState
     limit = betterPlayerController!.maxWatchTime;
 
     //todo: Check
-    // isCurrentChapterCompleted = betterPlayerController!.chapterCompletedController.value;
+    // isCurrentChapterCompleted = betterPlayerController!.
+    // chapterCompletedController.value;
   }
 
   @override
