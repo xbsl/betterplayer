@@ -177,8 +177,8 @@ class BetterPlayerController {
   StreamSubscription<VideoEvent>? _videoEventStreamSubscription;
 
   //? Custom variable to alter settings such as drag and forward on on chapter
-  BehaviorSubject<ChapterStatus> chapterCompletedController =
-  BehaviorSubject<ChapterStatus>.seeded(null);
+  BehaviorSubject<ChapterStatus?> chapterCompletedController =
+  BehaviorSubject<ChapterStatus?>.seeded(null);
 
   Stream get chapterCompleted => chapterCompletedController.stream;
   ///Are controls always visible
