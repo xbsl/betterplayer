@@ -267,8 +267,7 @@ class BetterPlayerController {
   }
 
   void setCurrentChapterStatus(bool status){
-    chapterCompletedController
-        .add(status ? ChapterStatus.complete : ChapterStatus.incompleted);
+    chapterCompletedController.add(status ? ChapterStatus.complete : ChapterStatus.incompleted);
   }
 
   void enableLifecycleEvents() => _handleLifecycle = true;
