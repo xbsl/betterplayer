@@ -93,13 +93,13 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget>
                 Navigator.of(context).pop();
                 _showQualitiesSelectionWidget();
               }),
-            if (betterPlayerControlsConfiguration.enableAudioTracks)
-              _buildMoreOptionsListRow(
-                  betterPlayerControlsConfiguration.audioTracksIcon,
-                  translations.overflowMenuAudioTracks, () {
-                Navigator.of(context).pop();
-                _showAudioTracksSelectionWidget();
-              }),
+            // if (betterPlayerControlsConfiguration.enableAudioTracks)
+            //   _buildMoreOptionsListRow(
+            //       betterPlayerControlsConfiguration.audioTracksIcon,
+            //       translations.overflowMenuAudioTracks, () {
+            //     Navigator.of(context).pop();
+            //     _showAudioTracksSelectionWidget();
+            //   }),
             if (betterPlayerControlsConfiguration
                 .overflowMenuCustomItems.isNotEmpty)
               ...betterPlayerControlsConfiguration.overflowMenuCustomItems.map(
