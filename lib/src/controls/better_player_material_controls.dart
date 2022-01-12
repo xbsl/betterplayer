@@ -437,13 +437,13 @@ class _BetterPlayerMaterialControlsState
       child: _betterPlayerController?.isLiveStream() == true
           ? const SizedBox()
           : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (_controlsConfiguration.enableSkips)
                   _buildSkipButton()
                 else
                   const SizedBox(),
-                _buildReplayButton(_controller!),
+                // _buildReplayButton(_controller!),
                 StreamBuilder<dynamic>(
                   initialData: ChapterStatus.incompleted,
                   stream: betterPlayerController!.chapterCompleted,
