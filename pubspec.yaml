@@ -15,7 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.3
-  rxdart: ^0.24.1
+  rxdart: ^0.27.3
   wakelock: ^0.5.6
   pedantic: ^1.11.1
   meta: any
