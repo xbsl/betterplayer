@@ -189,7 +189,7 @@ class _BetterPlayerMaterialControlsState
     }
 
     if (Platform.isIOS)
-      AnimatedOpacity(
+      return AnimatedOpacity(
         opacity: controlsNotVisible  ? 0.0 : 1.0,
         duration: _controlsConfiguration.controlsHideTime,
         onEnd: _onPlayerHide,
@@ -204,7 +204,7 @@ class _BetterPlayerMaterialControlsState
         ),
       );
     else
-      const SizedBox();
+      return const SizedBox();
 
     return Container(
       child: (_controlsConfiguration.enableOverflowMenu)
