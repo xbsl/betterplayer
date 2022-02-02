@@ -15,8 +15,8 @@ import 'better_player_controller_provider.dart';
 class BetterPlayer extends StatefulWidget {
   const BetterPlayer(
       {Key? key,
-        required this.controller,
-        this.playerLanguage = PlayerLanguage.en});
+      required this.controller,
+      this.playerLanguage = PlayerLanguage.en});
   factory BetterPlayer.network(
     String url, {
     BetterPlayerConfiguration? betterPlayerConfiguration,
@@ -26,7 +26,8 @@ class BetterPlayer extends StatefulWidget {
           betterPlayerConfiguration ?? const BetterPlayerConfiguration(),
           betterPlayerDataSource:
               BetterPlayerDataSource(BetterPlayerDataSourceType.network, url),
-        ), playerLanguage: null,
+        ),
+        playerLanguage: null,
       );
 
   factory BetterPlayer.file(
@@ -99,7 +100,8 @@ class _BetterPlayerState extends State<BetterPlayer>
     } catch (exception) {
       BetterPlayerUtils.log(exception.toString());
     }
-    widget.controller.setupTranslations(widget.playerLanguage!);
+    if (widget.playerLanguage != null)
+      widget.controller.setupTranslations(widget.playerLanguage!);
   }
 
   @override
@@ -278,7 +280,8 @@ class _BetterPlayerState extends State<BetterPlayer>
             controller: widget.controller,
           ),
         ),
-        widget.controller.betterPlayerConfiguration.overlayWidget!.call(),
+        if (widget.controller.betterPlayerConfiguration.overlayWidget != null)
+          widget.controller.betterPlayerConfiguration.overlayWidget!.call(),
       ],
     );
   }

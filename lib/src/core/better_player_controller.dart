@@ -25,10 +25,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../better_player.dart';
 import 'package:rxdart/rxdart.dart';
 
-
-enum PlayerLanguage { en, hi}
+enum PlayerLanguage { en, hi }
 enum ChapterStatus { complete, incompleted }
-
 
 ///Class used to control overall Better Player behavior. Main class to change
 ///state of Better Player.
@@ -178,9 +176,10 @@ class BetterPlayerController {
 
   //? Custom variable to alter settings such as drag and forward on on chapter
   BehaviorSubject<ChapterStatus?> chapterCompletedController =
-  BehaviorSubject<ChapterStatus?>.seeded(null);
+      BehaviorSubject<ChapterStatus?>.seeded(null);
 
   Stream get chapterCompleted => chapterCompletedController.stream;
+
   ///Are controls always visible
   bool _controlsAlwaysVisible = false;
 
@@ -231,7 +230,7 @@ class BetterPlayerController {
   bool get showForwadSkip => videoPlayerController!.value == null
       ? false
       : videoPlayerController!.value.position.inSeconds + 10 <
-      maxWatchTime!.inSeconds;
+          maxWatchTime!.inSeconds;
 
   bool stopSendingEvents = false;
 
@@ -266,8 +265,9 @@ class BetterPlayerController {
     return betterPLayerControllerProvider.controller;
   }
 
-  void setCurrentChapterStatus(bool status){
-    chapterCompletedController.add(status ? ChapterStatus.complete : ChapterStatus.incompleted);
+  void setCurrentChapterStatus(bool status) {
+    chapterCompletedController
+        .add(status ? ChapterStatus.complete : ChapterStatus.incompleted);
   }
 
   void enableLifecycleEvents() => _handleLifecycle = true;
@@ -302,7 +302,6 @@ class BetterPlayerController {
 
     //? Reset maxWatchTime on change;
     maxWatchTime = Duration();
-
 
     ///Setup subtitles
     final List<BetterPlayerSubtitlesSource>? betterPlayerSubtitlesSourceList =
@@ -608,7 +607,7 @@ class BetterPlayerController {
         .listen(_handleVideoEvent);
 
     final fullScreenByDefault = betterPlayerConfiguration.fullScreenByDefault;
-    if (handleLifecycle!) {
+    if (handleLifecycle == true) {
       if (fullScreenByDefault && !isFullScreen) {
         enterFullScreen();
       }
@@ -857,18 +856,20 @@ class BetterPlayerController {
       _loadAsmsSubtitlesSegments(currentVideoPlayerValue.position);
     }
 
-    final int now = DateTime.now().millisecondsSinceEpoch;
-    if (now - _lastPositionSelection > 500) {
-      _lastPositionSelection = now;
-      _postEvent(
-        BetterPlayerEvent(
-          BetterPlayerEventType.progress,
-          parameters: <String, dynamic>{
-            _progressParameter: currentVideoPlayerValue.position,
-            _durationParameter: currentVideoPlayerValue.duration
-          },
-        ),
-      );
+    if (hasCurrentDataSourceStarted) {
+      final int now = DateTime.now().millisecondsSinceEpoch;
+      if (now - _lastPositionSelection > 500) {
+        _lastPositionSelection = now;
+        _postEvent(
+          BetterPlayerEvent(
+            BetterPlayerEventType.progress,
+            parameters: <String, dynamic>{
+              _progressParameter: currentVideoPlayerValue.position,
+              _durationParameter: currentVideoPlayerValue.duration
+            },
+          ),
+        );
+      }
     }
   }
 
@@ -974,9 +975,9 @@ class BetterPlayerController {
   ///Check if player can be played/paused automatically
   bool _isAutomaticPlayPauseHandled() {
     return !(_betterPlayerDataSource
-                ?.notificationConfiguration?.showNotification ==
-            true);
-        // betterPlayerConfiguration.handleLifecycle;
+            ?.notificationConfiguration?.showNotification ==
+        true);
+    // betterPlayerConfiguration.handleLifecycle;
   }
 
   ///Listener which handles state of player visibility. If player visibility is
